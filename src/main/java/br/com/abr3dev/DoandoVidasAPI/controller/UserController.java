@@ -69,10 +69,10 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		content = contentService.register(content); 
+		content = this.contentService.register(content); 
 		user.setContent(content);
 		user = userService.register(user); 
-		response.setData(converterUserDto(user));
+		response.setData(converterCompleteDto(user));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -97,11 +97,6 @@ public class UserController {
 			return;
 		}
 		
-		if (userDto.getContentId() == null) {
-			result.addError(new ObjectError("cont", "Conteudo não preenchido"));
-			return;
-		}
-		
 		Optional<User> user = userService.findById(userDto.getId());
 		if(!user.isPresent()) {
 			result.addError(new ObjectError("user", "Usuário não encontrado, ID inexistente"));
@@ -112,14 +107,12 @@ public class UserController {
 	private UserDto converterUserDto(User user) {
 		UserDto userDto = new UserDto(); 
 		userDto.setId(user.getId());
+		userDto.setName(user.getName());
 		userDto.setEmail(user.getEmail());
 		userDto.setCpf(user.getCpf());
 		userDto.setPassword(user.getPassword());
 		userDto.setBirthDate(this.df.format(user.getBirthDate()));
 		userDto.setGender(user.getGender());
-		userDto.setContentId(user.getContent().getId());
-		userDto.setMessage(user.getContent().getMessage());
-		userDto.setVideo(user.getContent().getVideo());
 		
 		return userDto;
 	}
@@ -142,6 +135,7 @@ public class UserController {
 			user.getContent().setVideo(userDto.getVideo());
 		}
 		
+		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
 		user.setCpf(userDto.getCpf()); 
 		user.setPassword(userDto.getPassword());
@@ -158,6 +152,22 @@ public class UserController {
 		content.setVideo(userDto.getVideo());
 		
 		return content;
+	}
+	
+	private UserDto converterCompleteDto(User user) {
+		UserDto userDto = new UserDto(); 
+		userDto.setId(user.getId());
+		userDto.setName(user.getName());
+		userDto.setEmail(user.getEmail());
+		userDto.setCpf(user.getCpf());
+		userDto.setPassword(user.getPassword());
+		userDto.setBirthDate(this.df.format(user.getBirthDate()));
+		userDto.setGender(user.getGender());
+		userDto.setContentId(user.getContent().getId());
+		userDto.setMessage(user.getContent().getMessage());
+		userDto.setVideo(user.getContent().getVideo());
+		
+		return userDto;
 	}
 	
 }

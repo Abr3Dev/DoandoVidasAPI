@@ -10,6 +10,9 @@ public class UserDto {
 	
 	private Long id;
 	
+	@NotBlank(message="Nome não pode ser vazio")
+	private String name;
+	
 	@NotBlank(message="E-mail não pode ser vazio")
 	@Email(message="E-mail inválido")
 	private String email; 
@@ -28,11 +31,9 @@ public class UserDto {
 	@NotBlank(message="Genero precisa ser informado")
 	private String gender;
 	
-	@NotBlank(message="É necessário inserir uma mensagem")
 	@Size(max=300, message="Tamanho da mensagem deve ser de 300 caracteres.")
 	private String message; 
 	
-	@NotBlank(message="É necessário inserir um video")
 	private String video;
 	
 	private Long contentId;
@@ -43,6 +44,14 @@ public class UserDto {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
