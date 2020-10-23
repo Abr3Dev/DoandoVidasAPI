@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,13 +27,17 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="NAME", nullable=false)
+	@Lob
+	@Column(name="IMG_AVATAR", columnDefinition = "BLOB")
+	private byte[] avatar;
+	
+	@Column(name="NM_NAME", nullable=false)
 	private String name;
 	
-	@Column(name="EMAIL", nullable = false)
+	@Column(name="DS_EMAIL", nullable = false)
 	private String email; 
 	
-	@Column(name="CPF", nullable = false)
+	@Column(name="DS_CPF", nullable = false)
 	private String cpf; 
 
 	@Column(name="DS_PASSWORD", nullable = false)
@@ -56,6 +61,14 @@ public class User {
 		this.id = id;
 	}
 	
+	public byte[] getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
+	}
+
 	public String getName() {
 		return name;
 	}

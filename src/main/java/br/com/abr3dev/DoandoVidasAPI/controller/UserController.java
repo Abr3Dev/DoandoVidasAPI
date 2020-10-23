@@ -12,8 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,11 +39,26 @@ public class UserController {
 	@Autowired
 	private ContentService contentService;
 	
-	@GetMapping("/user/{email}/{password}")
+	@PostMapping("/user/{email}/{password}")
 	public ResponseEntity<Response<UserDto>> login(@PathVariable(value = "email") String email, @PathVariable(value = "password") String password) {
 		
 		Response<UserDto> response = new Response<UserDto>(); 
 		Optional<User> user = userService.findByEmailAndPassword(email, password);
+		
+		if(!user.isPresent()) {
+			response.getErrors().add("Usuário não encontrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		response.setData(this.converterUserDto(user.get())); 
+		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/user/{cpf}")
+	public ResponseEntity<Response<UserDto>> findByCpf(@PathVariable(value = "cpf") String cpf) {
+		
+		Response<UserDto> response = new Response<UserDto>(); 
+		Optional<User> user = userService.findByCpf(cpf);
 		
 		if(!user.isPresent()) {
 			response.getErrors().add("Usuário não encontrado");
@@ -60,6 +75,7 @@ public class UserController {
 		
 		Response<UserDto> response = new Response<UserDto>(); 
 		validarUser(userDto, result); 
+		
 		userDto.setId(id);
 		Content content = converterDtoParaContent(userDto);
 		User user = converterDtoParaUser(userDto, result);
@@ -72,7 +88,7 @@ public class UserController {
 		content = this.contentService.register(content); 
 		user.setContent(content);
 		user = userService.register(user); 
-		response.setData(converterCompleteDto(user));
+		response.setData(converterUserDto(user));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -114,6 +130,12 @@ public class UserController {
 		userDto.setBirthDate(this.df.format(user.getBirthDate()));
 		userDto.setGender(user.getGender());
 		
+		if(user.getContent() != null) {
+		userDto.setContentId(user.getContent().getId());
+		userDto.setMessage(user.getContent().getMessage());
+		userDto.setVideo(user.getContent().getVideo());
+		}
+		
 		return userDto;
 	}
 	
@@ -129,7 +151,6 @@ public class UserController {
 				result.addError(new ObjectError("user", "Usuário não encontrado."));
 			}
 		} else {
-			user.setContent(new Content());
 			user.getContent().setId(userDto.getContentId());
 			user.getContent().setMessage(userDto.getMessage());
 			user.getContent().setVideo(userDto.getVideo());
@@ -147,27 +168,11 @@ public class UserController {
 	
 	private Content converterDtoParaContent(UserDto userDto) {
 		Content content = new Content(); 
-		content.setId(userDto.getContentId());
+		content.setId(userDto.getId());
 		content.setMessage(userDto.getMessage());
 		content.setVideo(userDto.getVideo());
 		
 		return content;
-	}
-	
-	private UserDto converterCompleteDto(User user) {
-		UserDto userDto = new UserDto(); 
-		userDto.setId(user.getId());
-		userDto.setName(user.getName());
-		userDto.setEmail(user.getEmail());
-		userDto.setCpf(user.getCpf());
-		userDto.setPassword(user.getPassword());
-		userDto.setBirthDate(this.df.format(user.getBirthDate()));
-		userDto.setGender(user.getGender());
-		userDto.setContentId(user.getContent().getId());
-		userDto.setMessage(user.getContent().getMessage());
-		userDto.setVideo(user.getContent().getVideo());
-		
-		return userDto;
 	}
 	
 }

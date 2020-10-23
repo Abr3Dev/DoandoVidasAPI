@@ -20,10 +20,10 @@ public class Content {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="DS_MESSAGE", nullable = false)
+	@Column(name="DS_MESSAGE")
 	private String message; 
 	
-	@Column(name="VIDEO", nullable = false)
+	@Column(name="VIDEO")
 	private String video;
 
 	public Long getId() {

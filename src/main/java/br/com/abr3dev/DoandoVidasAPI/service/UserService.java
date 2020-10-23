@@ -10,6 +10,10 @@ public interface UserService {
 	
 	Optional<User> findByEmailAndPassword(String email, String password);
 	
+	Optional<User> findByEmail(String email);
+	
+	Optional<User> findByCpf(String cpf);
+	
 	Optional<User> findById(Long id);
 	
 	void deleteById (Long id);

@@ -10,33 +10,35 @@ public class UserDto {
 	
 	private Long id;
 	
-	@NotBlank(message="Nome não pode ser vazio")
+	private byte[] avatar;
+	
+	@NotBlank(message="Nome deve ser informado.")
 	private String name;
 	
-	@NotBlank(message="E-mail não pode ser vazio")
-	@Email(message="E-mail inválido")
+	@NotBlank(message="E-mail deve ser informado.")
+	@Email(message="E-mail inválido.")
 	private String email; 
 	
-	@NotBlank(message="CPF não pode ser vazio")
-	@CPF(message="CPF inválido")
+	@NotBlank(message="CPF deve ser informado.")
+	@CPF(message="CPF inválido.")
 	private String cpf; 
 	
-	@NotBlank(message="Senha não pode ser vazia")
-	@Size(min=8, message="É necessario uma senha com mais de 5 caracteres")
+	@NotBlank(message="Senha deve ser preenchida.")
+	@Size(min=8, message="É necessario uma senha com no mínimo 8 caracteres.")
 	private String password; 
 	
-	@NotBlank(message="Data de nascimento não pode ser vazia")
+	@NotBlank(message="Data de nascimento deve ser preenchida.")
 	private String birthDate;
 	
-	@NotBlank(message="Genero precisa ser informado")
+	@NotBlank(message="Gênero deve ser informado.")
 	private String gender;
 	
-	@Size(max=300, message="Tamanho da mensagem deve ser de 300 caracteres.")
+	private Long contentId;
+	
+	@Size(max=300, message="Tamanho da mensagem não pode ultrapassar 300 caracteres.")
 	private String message; 
 	
 	private String video;
-	
-	private Long contentId;
 	
 	public Long getId() {
 		return id;
@@ -46,6 +48,14 @@ public class UserDto {
 		this.id = id;
 	}
 	
+	public byte[] getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -93,6 +103,14 @@ public class UserDto {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	
+	public Long getContentId() {
+		return contentId;
+	}
+
+	public void setContentId(Long contentId) {
+		this.contentId = contentId;
+	}
 
 	public String getMessage() {
 		return message;
@@ -108,13 +126,5 @@ public class UserDto {
 
 	public void setVideo(String video) {
 		this.video = video;
-	}
-
-	public Long getContentId() {
-		return contentId;
-	}
-
-	public void setContentId(Long contentId) {
-		this.contentId = contentId;
 	}
 }

@@ -35,6 +35,16 @@ public class UserServiceImpl implements UserService {
 		repository.deleteById(userId);
 	}
 
+	@Override
+	public Optional<User> findByCpf(String cpf) {
+		return repository.findByCpf(cpf);
+	}
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		return repository.findByEmail(email);
+	}
+
 	
 	
 }

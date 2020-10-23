@@ -52,8 +52,11 @@ public class CadastroUserController {
 	
 	private void validarDadosExistentes(RegisterDto registerDto, BindingResult result) {
 		
-		this.userService.findByEmailAndPassword(registerDto.getEmail(), registerDto.getPassword())
-		.ifPresent(user -> result.addError(new ObjectError("user", "Usuário já existente.")));
+		this.userService.findByEmail(registerDto.getEmail())
+		.ifPresent(user -> result.addError(new ObjectError("user", "E-mail já cadastrado.")));
+		
+		this.userService.findByCpf(registerDto.getCpf())
+		.ifPresent(user -> result.addError(new ObjectError("user", "CPF já cadastrado.")));
 		
 	}
 	

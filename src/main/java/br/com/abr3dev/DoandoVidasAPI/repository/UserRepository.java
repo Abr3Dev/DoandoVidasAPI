@@ -9,5 +9,9 @@ import br.com.abr3dev.DoandoVidasAPI.models.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	Optional<User> findByEmailAndPassword(String email, String password);
+	
+	Optional<User> findByEmail(String email);
+	
+	Optional<User> findByCpf(String cpf);
 
 }
