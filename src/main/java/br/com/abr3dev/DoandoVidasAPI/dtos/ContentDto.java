@@ -1,6 +1,5 @@
 package br.com.abr3dev.DoandoVidasAPI.dtos;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -16,11 +15,9 @@ public class ContentDto {
 	
 	private Long id;
 	
-	@NotBlank(message="É necessário inserir uma mensagem")
 	@Size(max=300, message="Tamanho da mensagem deve ser de 300 caracteres.")
 	private String message; 
 	
-	@NotBlank(message="É necessário inserir um video")
 	private String video;
 	
 	public Long getId() {

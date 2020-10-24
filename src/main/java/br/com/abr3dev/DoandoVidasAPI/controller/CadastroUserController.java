@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.abr3dev.DoandoVidasAPI.dtos.RegisterDto;
+import br.com.abr3dev.DoandoVidasAPI.dtos.UserDto;
+import br.com.abr3dev.DoandoVidasAPI.models.Content;
 import br.com.abr3dev.DoandoVidasAPI.models.User;
 import br.com.abr3dev.DoandoVidasAPI.response.Response;
 import br.com.abr3dev.DoandoVidasAPI.service.UserService;
@@ -31,12 +32,12 @@ public class CadastroUserController {
 	private UserService userService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<Response<RegisterDto>> register(@Valid @RequestBody RegisterDto registerDto, 
+	public ResponseEntity<Response<UserDto>> register(@Valid @RequestBody UserDto userDto, 
 			BindingResult result) throws ParseException {
-		Response<RegisterDto> response = new Response<RegisterDto>();
+		Response<UserDto> response = new Response<UserDto>();
 		
-		validarDadosExistentes(registerDto, result);
-		User user = this.converterDtoParaUser(registerDto, result);
+		validarDadosExistentes(userDto, result);
+		User user = this.converterDtoParaUser(userDto, result);
 		
 		if(result.hasErrors()) {
 			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
@@ -50,38 +51,43 @@ public class CadastroUserController {
 		
 	}
 	
-	private void validarDadosExistentes(RegisterDto registerDto, BindingResult result) {
+	private void validarDadosExistentes(UserDto userDto, BindingResult result) {
 		
-		this.userService.findByEmail(registerDto.getEmail())
+		this.userService.findByEmail(userDto.getEmail())
 		.ifPresent(user -> result.addError(new ObjectError("user", "E-mail já cadastrado.")));
 		
-		this.userService.findByCpf(registerDto.getCpf())
+		this.userService.findByCpf(userDto.getCpf())
 		.ifPresent(user -> result.addError(new ObjectError("user", "CPF já cadastrado.")));
 		
 	}
 	
-	private User converterDtoParaUser(RegisterDto registerDto, BindingResult result) throws ParseException {
-		User user = new User(); 
-		user.setName(registerDto.getName());
-		user.setEmail(registerDto.getEmail());
-		user.setCpf(registerDto.getCpf()); 
-		user.setPassword(registerDto.getPassword());
-		user.setBirthDate(this.df.parse((registerDto.getBirthDate()))); 
-		user.setGender(registerDto.getGender());
+	private User converterDtoParaUser(UserDto userDto, BindingResult result) throws ParseException {
+		User user = new User();
+		user.setName(userDto.getName());
+		user.setEmail(userDto.getEmail());
+		user.setCpf(userDto.getCpf()); 
+		user.setPassword(userDto.getPassword());
+		user.setBirthDate(this.df.parse((userDto.getBirthDate()))); 
+		user.setGender(userDto.getGender());
+		user.setContent(new Content());
 		
 		return user;
 	}
 	
-	private RegisterDto converterRegisterDto(User user) {
-		RegisterDto registerDto = new RegisterDto(); 
-		registerDto.setName(user.getName());
-		registerDto.setEmail(user.getEmail());
-		registerDto.setCpf(user.getCpf());
-		registerDto.setPassword(user.getPassword()); 
-		registerDto.setBirthDate(this.df.format(user.getBirthDate())); 
-		registerDto.setGender(user.getGender());
+	private UserDto converterRegisterDto(User user) {
+		UserDto userDto = new UserDto();
+		userDto.setId(user.getId());
+		userDto.setName(user.getName());
+		userDto.setEmail(user.getEmail());
+		userDto.setCpf(user.getCpf());
+		userDto.setPassword(user.getPassword()); 
+		userDto.setBirthDate(this.df.format(user.getBirthDate())); 
+		userDto.setGender(user.getGender());
+		userDto.setContentId(user.getContent().getId());
+		userDto.setMessage(user.getContent().getMessage()); 
+		userDto.setVideo(user.getContent().getVideo());
 		
-		return registerDto;
+		return userDto;
 	}
 	
 }
