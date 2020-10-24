@@ -28,8 +28,8 @@ public class User {
 	private Long id;
 	
 	@Lob
-	@Column(name="IMG_AVATAR", columnDefinition = "BLOB")
-	private byte[] avatar;
+	@Column(name="IMG_AVATAR")
+	private String avatar;
 	
 	@Column(name="NM_NAME", nullable=false)
 	private String name;
@@ -61,11 +61,11 @@ public class User {
 		this.id = id;
 	}
 	
-	public byte[] getAvatar() {
+	public String getAvatar() {
 		return avatar;
 	}
 
-	public void setAvatar(byte[] avatar) {
+	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
 

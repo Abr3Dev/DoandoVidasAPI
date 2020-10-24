@@ -10,7 +10,7 @@ public class UserDto {
 	
 	private Long id;
 	
-	private byte[] avatar;
+	private String avatar;
 	
 	@NotBlank(message="Nome deve ser informado.")
 	private String name;
@@ -48,11 +48,11 @@ public class UserDto {
 		this.id = id;
 	}
 	
-	public byte[] getAvatar() {
+	public String getAvatar() {
 		return avatar;
 	}
 
-	public void setAvatar(byte[] avatar) {
+	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
 

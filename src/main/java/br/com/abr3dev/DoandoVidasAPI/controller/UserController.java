@@ -130,10 +130,14 @@ public class UserController {
 		userDto.setBirthDate(this.df.format(user.getBirthDate()));
 		userDto.setGender(user.getGender());
 		
+		if(user.getAvatar() != null) {
+			userDto.setAvatar(user.getAvatar());
+		}
+		
 		if(user.getContent() != null) {
-		userDto.setContentId(user.getContent().getId());
-		userDto.setMessage(user.getContent().getMessage());
-		userDto.setVideo(user.getContent().getVideo());
+			userDto.setContentId(user.getContent().getId());
+			userDto.setMessage(user.getContent().getMessage());
+			userDto.setVideo(user.getContent().getVideo());
 		}
 		
 		return userDto;
@@ -156,6 +160,7 @@ public class UserController {
 			user.getContent().setVideo(userDto.getVideo());
 		}
 		
+		user.setAvatar(userDto.getAvatar());
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
 		user.setCpf(userDto.getCpf()); 
