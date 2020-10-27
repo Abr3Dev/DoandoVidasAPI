@@ -26,7 +26,7 @@ import br.com.abr3dev.DoandoVidasAPI.service.UserService;
 @CrossOrigin(origins = "*")
 public class CadastroUserController {
 	
-	private final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat df;
 	
 	@Autowired
 	private UserService userService;
@@ -67,7 +67,10 @@ public class CadastroUserController {
 		user.setEmail(userDto.getEmail());
 		user.setCpf(userDto.getCpf()); 
 		user.setPassword(userDto.getPassword());
-		user.setBirthDate(this.df.parse((userDto.getBirthDate()))); 
+		String dataFormatada = "";
+		dataFormatada = dataFormatada.concat(userDto.getBirthDate().substring(6)+"-"+userDto.getBirthDate().substring(3, 5)+"-"+userDto.getBirthDate().substring(0, 2));
+		df = new SimpleDateFormat("yyyy-MM-dd");
+		user.setBirthDate(this.df.parse(dataFormatada));
 		user.setGender(userDto.getGender());
 		user.setContent(new Content());
 		
@@ -81,6 +84,7 @@ public class CadastroUserController {
 		userDto.setEmail(user.getEmail());
 		userDto.setCpf(user.getCpf());
 		userDto.setPassword(user.getPassword()); 
+		df = new SimpleDateFormat("dd/MM/yyyy");
 		userDto.setBirthDate(this.df.format(user.getBirthDate())); 
 		userDto.setGender(user.getGender());
 		userDto.setContentId(user.getContent().getId());

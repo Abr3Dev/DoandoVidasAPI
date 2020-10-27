@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.abr3dev.DoandoVidasAPI.dtos.UserDto;
-import br.com.abr3dev.DoandoVidasAPI.models.Content;
 import br.com.abr3dev.DoandoVidasAPI.models.User;
 import br.com.abr3dev.DoandoVidasAPI.response.Response;
-import br.com.abr3dev.DoandoVidasAPI.service.ContentService;
 import br.com.abr3dev.DoandoVidasAPI.service.UserService;
 
 @RestController
@@ -31,13 +29,10 @@ import br.com.abr3dev.DoandoVidasAPI.service.UserService;
 @CrossOrigin(origins = "*")
 public class UserController {
 	
-	private final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat df;
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private ContentService contentService;
 	
 	@PostMapping("/user/{email}/{password}")
 	public ResponseEntity<Response<UserDto>> login(@PathVariable(value = "email") String email, @PathVariable(value = "password") String password) {
@@ -77,7 +72,6 @@ public class UserController {
 		validarUser(userDto, result); 
 		
 		userDto.setId(id);
-		Content content = converterDtoParaContent(userDto);
 		User user = converterDtoParaUser(userDto, result);
 		
 		if(result.hasErrors()) {
@@ -85,8 +79,6 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		content = this.contentService.register(content); 
-		user.setContent(content);
 		user = userService.register(user); 
 		response.setData(converterUserDto(user));
 		return ResponseEntity.ok(response);
@@ -127,6 +119,7 @@ public class UserController {
 		userDto.setEmail(user.getEmail());
 		userDto.setCpf(user.getCpf());
 		userDto.setPassword(user.getPassword());
+		df = new SimpleDateFormat("dd/MM/yyyy");
 		userDto.setBirthDate(this.df.format(user.getBirthDate()));
 		userDto.setGender(user.getGender());
 		
@@ -156,8 +149,6 @@ public class UserController {
 			}
 		} else {
 			user.getContent().setId(userDto.getContentId());
-			user.getContent().setMessage(userDto.getMessage());
-			user.getContent().setVideo(userDto.getVideo());
 		}
 		
 		user.setAvatar(userDto.getAvatar());
@@ -165,19 +156,13 @@ public class UserController {
 		user.setEmail(userDto.getEmail());
 		user.setCpf(userDto.getCpf()); 
 		user.setPassword(userDto.getPassword());
-		user.setBirthDate(this.df.parse((userDto.getBirthDate()))); 
+		String dataFormatada = "";
+		dataFormatada = dataFormatada.concat(userDto.getBirthDate().substring(6)+"-"+userDto.getBirthDate().substring(3, 5)+"-"+userDto.getBirthDate().substring(0, 2));
+		df = new SimpleDateFormat("yyyy-MM-dd");
+		user.setBirthDate(this.df.parse(dataFormatada)); 
 		user.setGender(userDto.getGender());
 		
 		return user;
-	}
-	
-	private Content converterDtoParaContent(UserDto userDto) {
-		Content content = new Content(); 
-		content.setId(userDto.getId());
-		content.setMessage(userDto.getMessage());
-		content.setVideo(userDto.getVideo());
-		
-		return content;
 	}
 	
 }
