@@ -64,6 +64,21 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@PostMapping("/user/{email}")
+	public ResponseEntity<Response<UserDto>> findByEmail(@PathVariable(value = "email") String email) {
+		
+		Response<UserDto> response = new Response<UserDto>(); 
+		Optional<User> user = userService.findByEmail(email);
+		
+		if(!user.isPresent()) {
+			response.getErrors().add("Usuário não encontrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		response.setData(this.converterUserDto(user.get())); 
+		return ResponseEntity.ok(response);
+	}
+	
 	@PutMapping("/user/{id}")
 	public ResponseEntity<Response<UserDto>> update(@PathVariable("id") Long id, 
 			@Valid @RequestBody UserDto userDto, BindingResult result) throws ParseException {
