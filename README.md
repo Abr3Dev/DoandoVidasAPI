@@ -41,28 +41,21 @@ https://localhost:8081/api/doandovidas/user/delete{id}
 
 Request e Response:
 
-![DeleteUsuario](https://user-images.githubusercontent.com/47859622/96776920-0c8abe80-13c0-11eb-8eae-883cfe8fbf96.png)
 
 Cadastro Conteúdo:
 https://localhost:8081/api/doandovidas/content
 
 Request e Response:
 
-![CadastroConteudo](https://user-images.githubusercontent.com/47859622/96776802-e533f180-13bf-11eb-8783-9deeca5d1f89.png)
-
 Busca do Conteúdo pelo id: 
 https://localhost:8081/api/doandovidas/content/{id}
 
 Request e Response:
 
-![BuscaConteudo](https://user-images.githubusercontent.com/47859622/96776736-cfbec780-13bf-11eb-86f5-b616431ae6cc.png)
-
 Atualização do Conteúdo pelo id: 
 https://localhost:8081/api/doandovidas/content/update/{id}
 
 Request e Response:
-
-![AtualizaçãoConteudo](https://user-images.githubusercontent.com/47859622/96776677-ba499d80-13bf-11eb-9d11-e1bae403ce02.png) 
 
 Remoção do Conteúdo pelo id:
 https://localhost:8081/api/doandovidas/content/delete/{id}
